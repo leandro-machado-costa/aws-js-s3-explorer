@@ -32,6 +32,9 @@ permissions and limitations under the License.
             a { color: #00B7FF; }
             body { font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
             td { font: 12px "Lucida Grande", Helvetica, Arial, sans-serif; }
+            a span { position:absolute; display:none; z-index:99; }
+            a:hover span { display:block; }
+            a:hover span img{max-width: 500px; }
         </style>
     </head>
 
@@ -426,7 +429,11 @@ $(document).ready(function(){
             return '<a data-s3="folder" data-prefix="' + data + '" href="' + object2hrefvirt(s3exp_config.Bucket, data) + '">' + prefix2folder(data) + '</a>';
         } else {
             console.log("not folder/this document: " + data);
-            return '<a data-s3="object" href="' + object2hrefvirt(s3exp_config.Bucket, data) + '">' + fullpath2filename(data) + '</a>';
+            var imageView = '';
+            if(fullpath2filename(data).toUpperCase().indexOf("PNG") > -1 || fullpath2filename(data).toUpperCase().indexOf("JPG") > -1){
+                imageView = '<span><img src="' + object2hrefvirt(s3exp_config.Bucket, data) + '" alt="image"/></span>'
+            }
+            return '<a data-s3="object" href="' + object2hrefvirt(s3exp_config.Bucket, data) + '">' + fullpath2filename(data) + imageView + '</a>';
         }
     }
 
